@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { MongoClient, ServerApiVersion } = require('mongodb');
+const { query } = require('express');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
@@ -36,7 +37,7 @@ async function run() {
         const productsCollections = client.db('Cricket_Lover').collection('products');
         const bookingCollections = client.db('Cricket_Lover').collection('bookings');
         const usersCollections = client.db('Cricket_Lover').collection('users');
-
+        console.log('database connected ')
 
         //users info
         app.put('/user/:email', async (req, res) => {
@@ -55,27 +56,51 @@ async function run() {
             res.send({ result, token });
         })
 
+        app.get('/products/:category', async (req, res) => {
+            const categoryName = req?.params?.category;
+            console.log('hi category', categoryName)
+            const query = {
+                category: categoryName
+            }
+            console.log('this is qi', query)
+            const products = await productsCollections.find(query).toArray();
+            console.log(products)
+            res.send(products);
+        })
+
+        //find all categories
         app.get('/categories', async (req, res) => {
             const query = {};
             const categories = await productCategoriesCollections.find(query).toArray();
+            console.log(categories)
             res.send(categories);
         })
-        app.get('/categories/:id', async (req, res) => {
-            const query = req.body.id;
-            const categories = await productsCollections.find(query).toArray();
-            res.send(categories);
-        })
-        app.get('/products', async (req, res) => {
-            const query = {};
-            const products = await productsCollections.find(query).toArray();
-            res.send(products);
-        })
+
+
+        // add product 
+        app.post('/products', async (req, res) => {
+            const user = req.body;
+            const result = await productsCollections.insertOne(user);
+            res.send(result);
+        });
+
+        // booking 
         app.post('/bookings', async (req, res) => {
             const user = req.body;
             const result = await bookingCollections.insertOne(user);
             res.send(result);
         });
 
+
+        //all users
+        app.get('/users', async (req, res) => {
+            const query = {};
+            const users = await usersCollections.find(query).toArray();
+            res.send(users)
+        })
+    }
+    catch {
+        console.log(error)
     }
     finally {
 
