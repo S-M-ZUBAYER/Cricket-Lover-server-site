@@ -77,6 +77,19 @@ async function run() {
         })
 
 
+        //my orders
+        app.get('/bookings', async (req, res) => {
+            const email = req.query.email;
+            // const decodedEmail = req.decoded.email;
+            // if (email !== decodedEmail) {
+            //     return res.status(403).send({ message: 'forbidden access' })
+            // }
+            const query = { email: email };
+            const bookings = await bookingCollections.find(query).toArray();
+            res.send(bookings);
+        });
+
+
         // add product 
         app.post('/products', async (req, res) => {
             const user = req.body;
@@ -99,9 +112,7 @@ async function run() {
             res.send(users)
         })
     }
-    catch {
-        console.log(error)
-    }
+
     finally {
 
     }
