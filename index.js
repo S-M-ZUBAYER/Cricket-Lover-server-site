@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const { query } = require('express');
 require('dotenv').config();
 const port = process.env.PORT || 5000;
@@ -122,6 +122,17 @@ async function run() {
             const users = await usersCollections.find(query).toArray();
             res.send(users)
         })
+
+        // delete user
+        app.delete('/users/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            console.log(filter)
+            const result = await usersCollections.deleteOne(filter);
+            res.send(result)
+        });
+
+
     }
 
     finally {
