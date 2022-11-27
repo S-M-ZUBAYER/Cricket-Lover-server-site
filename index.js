@@ -88,6 +88,17 @@ async function run() {
             const bookings = await bookingCollections.find(query).toArray();
             res.send(bookings);
         });
+        //my products
+        app.get('/products', async (req, res) => {
+            const email = req.query.email;
+            // const decodedEmail = req.decoded.email;
+            // if (email !== decodedEmail) {
+            //     return res.status(403).send({ message: 'forbidden access' })
+            // }
+            const query = { email: email };
+            const products = await productsCollections.find(query).toArray();
+            res.send(products);
+        });
 
 
         // add product 
