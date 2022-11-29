@@ -59,35 +59,6 @@ async function run() {
         });
 
 
-        // app.get('/jwt', async (req, res) => {
-        //     const email = req.query.email;
-        //     const query = { email: email }
-        //     const user = await usersCollections.findOne(query);
-        //     if (user) {
-        //         const token = jwt.sign({ email }, process.env.ACCESS_TOKEN, { expiresIn: '1h' });
-        //         res.send({ ACCESS_TOKEN: token });
-        //     }
-        //     else {
-        //         res.status(403).send({ ACCESS_TOKEN: 'null' })
-        //     }
-
-        // })
-        // app.put('/product/:id', async (req, res) => {
-        //     const id = req.params.id;
-        //     console.log(id)
-        //     const user = req.body;
-        //     const filter = { _id: ObjectId(id) };
-        //     const options = { upsert: true };
-        //     const updateDoc = {
-        //         $set: user
-        //     }
-        //     const result = await usersCollections.updateOne(filter, updateDoc, options);
-        //     const token = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        //         expiresIn: '7d'
-        //     });
-        //     res.send({ result, token });
-        // })
-
         // update for advertise
         app.put('/product/:id', async (req, res) => {
             const id = req.params.id;
