@@ -9,7 +9,6 @@ const port = process.env.PORT || 5000;
 
 
 const app = express();
-
 app.use(cors());
 app.use(express.json());
 
@@ -39,6 +38,7 @@ async function run() {
         const usersCollections = client.db('Cricket_Lover').collection('users');
         const paymentsCollection = client.db('Cricket_Lover').collection('payments');
 
+        //connection checking
         console.log('database connected ')
 
         //users info
@@ -58,7 +58,6 @@ async function run() {
             res.send({ result, token });
         });
 
-
         // update for advertise
         app.put('/product/:id', async (req, res) => {
             const id = req.params.id;
@@ -72,6 +71,7 @@ async function run() {
             const result = await productsCollections.updateOne(filter, updatedDoc, options);
             res.send(result);
         })
+
         app.put('/productBook/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
@@ -86,7 +86,6 @@ async function run() {
             const result = await productsCollections.updateOne(filter, updatedDoc, options);
             res.send(result);
         })
-
 
         app.get('/products/:category', async (req, res) => {
             const categoryName = req?.params?.category;
@@ -103,13 +102,13 @@ async function run() {
             const categories = await productCategoriesCollections.find(query).toArray();
             res.send(categories);
         })
+
         //find all products
         app.get('/products', async (req, res) => {
             const query = {};
             const products = await productsCollections.find(query).toArray();
             res.send(products);
         })
-
 
         //my orders
         app.get('/bookings', async (req, res) => {
@@ -122,6 +121,7 @@ async function run() {
             const bookings = await bookingCollections.find(query).toArray();
             res.send(bookings);
         });
+
         app.get('/products/:email', async (req, res) => {
             const email = req.query.email;
             // const decodedEmail = req.decoded.email;
@@ -140,6 +140,7 @@ async function run() {
             const booking = await bookingCollections.findOne(query);
             res.send(booking);
         })
+
         app.put('/booking/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
@@ -165,7 +166,6 @@ async function run() {
             res.send(products);
         });
 
-
         // add product 
         app.post('/products', async (req, res) => {
             const user = req.body;
@@ -179,7 +179,6 @@ async function run() {
             const result = await bookingCollections.insertOne(user);
             res.send(result);
         });
-
 
         //all users
         app.get('/users', async (req, res) => {
@@ -216,12 +215,14 @@ async function run() {
             const result = await productsCollections.deleteOne(filter);
             res.send(result)
         });
+
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
             const user = await usersCollections.findOne(query);
             res.send(user);
         })
+
         // payment setup
         app.post('/create-payment-intent', async (req, res) => {
             const booking = req.body;
@@ -263,12 +264,14 @@ async function run() {
             const user = await usersCollections.findOne(query);
             res.send({ isAdmin: user?.role === 'admin' });
         })
+
         app.get('/users/buyer/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
             const user = await usersCollections.findOne(query);
             res.send({ isBuyer: user?.accountType === 'Buyer' });
         })
+
         app.get('/users/seller/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
