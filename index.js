@@ -72,6 +72,7 @@ async function run() {
             res.send(result);
         })
 
+        // update the booking product
         app.put('/productBook/:id', async (req, res) => {
             const id = req.params.id;
             const filter = { _id: ObjectId(id) };
