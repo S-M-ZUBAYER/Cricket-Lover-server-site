@@ -38,6 +38,9 @@ async function run() {
         const usersCollections = client.db('Cricket_Lover').collection('users');
         const paymentsCollection = client.db('Cricket_Lover').collection('payments');
 
+
+        const newProductsCollections = client.db('Cricket_Lover').collection('newProducts');
+        const newBookingCollections = client.db('Cricket_Lover').collection('newBookings');
         //connection checking
         console.log('database connected ')
 
@@ -298,6 +301,62 @@ async function run() {
             const result = await usersCollections.updateOne(filter, updateDoc, options);
             res.send(result);
         });
+
+
+
+
+
+        //SSS Shop site
+        app.post('/newBookings', async (req, res) => {
+            const user = req.body;
+            const result = await newBookingCollections.insertOne(user);
+            res.send(result);
+        });
+
+
+        app.get('/newBookings', async (req, res) => {
+            const email = req.query.email;
+            // const decodedEmail = req.decoded.email;
+            // if (email !== decodedEmail) {
+            //     return res.status(403).send({ message: 'forbidden access' })
+            // }
+            const query = { email: email };
+            const bookings = await newBookingCollections.find(query).toArray();
+            res.send(bookings);
+        });
+
+        app.delete('/newBooking/:id', async (req, res) => {
+            const id = req.params.id;
+            const filter = { _id: ObjectId(id) };
+            const result = await newBookingCollections.deleteOne(filter);
+            res.send(result)
+        });
+
+        app.post('/newProducts', async (req, res) => {
+            const user = req.body;
+            const result = await newProductsCollections.insertOne(user);
+            res.send(result);
+        });
+
+        app.get('/newProducts', async (req, res) => {
+            const query = {};
+            const products = await newProductsCollections.find(query).toArray();
+            res.send(products);
+        })
+
+
+        // app.get('/newProducts/:email', async (req, res) => {
+        //     const email = req.query.email;
+        //     // const decodedEmail = req.decoded.email;
+        //     // if (email !== decodedEmail) {
+        //     //     return res.status(403).send({ message: 'forbidden access' })
+        //     // }
+        //     console.log(email)
+        //     const query = { email: email };
+        //     const myProducts = await newProductsCollections.find(query).toArray();
+        //     res.send(myProducts);
+        // });
+
 
     }
 
